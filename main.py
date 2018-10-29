@@ -22,10 +22,23 @@ x = np.array([[3,2],[4,5]])
 y = np.array([2,1])
 
 
-h = [training_images, training_labels]
+#h = [training_images, training_labels]
+
+
+#shuf = np.arange(X.shape[0])
+#h = np.array()
+
+
+#Shuffle data
+
+
+
+#train_shuffle = h[0]
+#lbls_shuffle = h[1]
+
 #Show MNIST image i
-plt.imshow(np.reshape(training_images[1],(28,28)),cmap='gray')
-plt.show()
+#plt.imshow(np.reshape(train_shuffle[0],(28,28)),cmap='gray')
+#plt.show()
 
 #Show ORL image i
 # i = 0
