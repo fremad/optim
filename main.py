@@ -21,6 +21,7 @@ test_images, test_labels = mndata.load_testing()
 x = np.array([[3,2],[4,5]])
 y = np.array([2,1])
 
+train_shuffle = np.asarray(training_images)
 
 #h = [training_images, training_labels]
 
@@ -31,14 +32,14 @@ y = np.array([2,1])
 
 #Shuffle data
 
-
+h = np.apply_along_axis(np.linalg.norm, 1, x)
 
 #train_shuffle = h[0]
 #lbls_shuffle = h[1]
 
 #Show MNIST image i
-#plt.imshow(np.reshape(train_shuffle[0],(28,28)),cmap='gray')
-#plt.show()
+plt.imshow(np.reshape(train_shuffle[0],(28,28)),cmap='gray')
+plt.show()
 
 #Show ORL image i
 # i = 0
