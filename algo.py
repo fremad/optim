@@ -49,7 +49,17 @@ def error_in_percent(true_lbls,model_lbls):
     return errors/true_lbls.shape[0], errors
 
 
+def PCA(data,PCA_components):
+    mu_data = np.apply_along_axis(np.sum,0,data)/data.shape[0]
+    data_center = data - mu_data
+    S_T = np.transpose(data_center).dot(data_center)
+    eigenvalues, eigenvectors = np.linalg.eig(S_T)
 
+    ind = np.argpartition(eigenvalues, -PCA_components)[-PCA_components:]
+
+    W = np.array(np.transpose(eigenvectors)[ind])
+
+    return W.dot(np.transpose(data))
 
 
 
@@ -77,3 +87,14 @@ def error_in_percent(true_lbls,model_lbls):
 #
 # print('Guess : ',lbl)
 # print('Actual : ', test_labels[s_test[0]])
+
+
+### NEW SECTION !!!!
+
+# mean = np.apply_along_axis(np.sum,0,X)/X.shape[0]
+#
+# X_mean = X-mean
+#
+# S_T = np.transpose(X_mean).dot(X_mean)
+#
+# eigenvalues, eigenvectors = np.linalg.eig(S_T)
