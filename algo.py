@@ -71,7 +71,7 @@ def PCA(data,PCA_components):
 
     W = np.array(np.transpose(eigenvectors)[ind])
 
-    return W.dot(np.transpose(data))
+    return W.dot(np.transpose(data_center))
 
 
 def k_means(X,K,initial_mu_k):
