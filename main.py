@@ -70,24 +70,12 @@ ORL_heplbls = alg.nc_classify(ORL_training_images,ORL_test_images,ORL_training_l
 
 tmpdata = alg.PCA(training_images,2)
 
-c = np.argwhere(training_labels==0)
-c1 = np.argwhere(training_labels==1)
-c2 = np.argwhere(training_labels==2)
-c3 = np.argwhere(training_labels==3)
-c4 = np.argwhere(training_labels==4)
-c5 = np.argwhere(training_labels==5)
-c6 = np.argwhere(training_labels==6)
-c7 = np.argwhere(training_labels==7)
-c8 = np.argwhere(training_labels==8)
-c9 = np.argwhere(training_labels==9)
 
-plt.plot(tmpdata[0][c],tmpdata[1][c],'.',color='b',markersize=1)
-plt.plot(tmpdata[0][c1],tmpdata[1][c1],'.',color='r',markersize=1)
-plt.plot(tmpdata[0][c2],tmpdata[1][c2],'.',color='g',markersize=1)
-plt.plot(tmpdata[0][c3],tmpdata[1][c3],'.',color='c',markersize=1)
-plt.plot(tmpdata[0][c4],tmpdata[1][c4],'.',color='m',markersize=1)
-plt.plot(tmpdata[0][c5],tmpdata[1][c5],'.',color='y',markersize=1)
-plt.plot(tmpdata[0][c6],tmpdata[1][c6],'.',color='k',markersize=1)
-#plt.plot(tmpdata[0][c7],tmpdata[1][c7],'.',color='blue',markersize=1)
-#plt.plot(tmpdata[0][c8],tmpdata[1][c8],'.',color='blue',markersize=1)
-#plt.plot(tmpdata[0][c9],tmpdata[1][c9],'.',color='blue',markersize=1)
+c = []
+
+for i in range(10):
+    c.append(np.argwhere(training_labels==i))
+for c_in in c:
+    plt.plot(tmpdata[0][c_in],tmpdata[1][c_in],'.',color=np.random.rand(3,),markersize=1)
+
+

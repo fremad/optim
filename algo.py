@@ -50,8 +50,10 @@ def error_in_percent(true_lbls,model_lbls):
 
 
 def PCA(data,PCA_components):
-    mu_data = np.apply_along_axis(np.sum,0,data)/data.shape[0]
+    mu_data = np.mean(data, axis=0)
     data_center = data - mu_data
+
+
     S_T = np.transpose(data_center).dot(data_center)
     eigenvalues, eigenvectors = np.linalg.eig(S_T)
 
@@ -62,7 +64,34 @@ def PCA(data,PCA_components):
     return W.dot(np.transpose(data))
 
 
+def k_means(X,K,initial_mu_k):
+    mu_k = initial_mu_k
+    while True:
+        new_mu_k = np.zeros((mu_k.shape[0], mu_k.shape[1]))
+        clusters = []
+        for k in range(K):
+            clusters.append(np.array([]))
 
+        for l in range(X.shape[0]):
+            tmp = np.zeros(mu_k.shape[0])
+            for i in range(K):
+                # np.subtract(X[0], mu_k[0])
+                tmp[i] = np.linalg.norm(np.subtract(X[l], mu_k[i]))
+
+            clusters[np.argmin(tmp)] = np.concatenate((clusters[np.argmin(tmp)], X[l]))
+        for j in range(len(clusters)):
+            clusters[j] = clusters[j].reshape(-1, X.shape[1])
+            # Assign to mu vector
+
+        for f in range(len(clusters)):
+            new_mu_k[f] = np.mean(clusters[f], axis=0)
+
+        if (np.linalg.norm(mu_k - new_mu_k) < 0.005):
+            mu_k = new_mu_k
+            break
+        mu_k = new_mu_k
+
+    return mu_k, clusters
 
 
 
