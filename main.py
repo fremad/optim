@@ -42,7 +42,7 @@ np.random.shuffle(s_test)
 
 lbls = alg.nc_classify(training_images,test_images,training_labels,10)
 
-#print(alg.error_in_percent(test_labels,lbls))
+print(alg.error_in_percent(test_labels,lbls))
 
 
 #Shuffle dataset by creating indexes
@@ -77,5 +77,7 @@ for i in range(10):
     c.append(np.argwhere(training_labels==i))
 for c_in in c:
     plt.plot(tmpdata[0][c_in],tmpdata[1][c_in],'.',color=np.random.rand(3,),markersize=1)
+
+nn_test_labels = alg.nn_classify(training_labels,test_images,training_labels)
 
 

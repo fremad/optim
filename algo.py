@@ -32,14 +32,24 @@ def nc_classify(Xtrain,Xtest,train_lbls,N_k):
 def nsc_classify(Xtrain,K,Xtest, train_lbls):
     print("not yet implemented")
 
+def nn_classify(Xtrain,Xtest,train_lbls):
+
+    lbls = np.zeros(Xtest.shape[0])
+
+    for i in range(Xtest.shape[0]):
+        tmp = np.zeros(Xtrain.shape[0])
+        for j in range(Xtrain.shape[0]):
+            tmp[i] = np.linalg.norm(np.subtract(Xtest[i], Xtrain[j]))
+
+        lbls[i] = train_lbls[np.argmin(tmp)]
+
+        return lbls
+
 def train_perceptron_backprop(Xtrain, train_lbls, eta):
     print("not implemented")
 
 def perceptron_bp_classify(W,Xtest):
     print("not implemented")
-
-#def k_means_classify(Xtrain, Xtest):
-#    print("not implemented")
 
 def error_in_percent(true_lbls,model_lbls):
     errors = 0.0
@@ -91,7 +101,7 @@ def k_means(X,K,initial_mu_k):
             break
         mu_k = new_mu_k
 
-    return mu_k, clusters
+    return mu_k
 
 
 
