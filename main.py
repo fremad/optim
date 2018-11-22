@@ -2,13 +2,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import algo as alg
 from mnist import MNIST
+from data_import import ORL_data_import
 
 from matplotlib.mlab import PCA
 
+#TODO Clean the code up
 
 #ORL training data and label import
-ORL_images = np.transpose(np.genfromtxt('./data/orl_data.txt', delimiter=""))
-ORL_lbls = np.genfromtxt('./data/orl_lbls.txt', delimiter="\t")
+(ORL_images, ORL_lbls) = ORL_data_import()
+
 
 #MNIST data import
 mndata = MNIST('./data')
@@ -20,6 +22,8 @@ training_labels = np.asarray(training_labels)
 test_images = np.asarray(test_images)
 test_labels = np.asarray(test_labels)
 
+training_images = training_images / 255
+test_images = test_images / 255
 
 #Shuffle dataset by creating indexes
 s_training = np.arange(training_images.shape[0])
@@ -76,7 +80,7 @@ c = []
 for i in range(10):
     c.append(np.argwhere(training_labels==i))
 for c_in in c:
-    plt.plot(tmpdata[0][c_in],tmpdata[1][c_in],'.',color=np.random.rand(3,),markersize=1)
+    plt.plot(tmpdata[1][c_in],tmpdata[0][c_in],'.',color=np.random.rand(3,),markersize=1)
 
 nn_test_labels = alg.nn_classify(training_labels,test_images,training_labels)
 
