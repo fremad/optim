@@ -39,17 +39,36 @@ def nn_classify(Xtrain,Xtest,train_lbls):
     for i in range(Xtest.shape[0]):
         tmp = np.zeros(Xtrain.shape[0])
         for j in range(Xtrain.shape[0]):
-            tmp[i] = np.linalg.norm(np.subtract(Xtest[i], Xtrain[j]))
+            tmp[j] = np.linalg.norm(np.subtract(Xtest[i], Xtrain[j]))
 
         lbls[i] = train_lbls[np.argmin(tmp)]
 
-        return lbls
+    return lbls
 
 def train_perceptron_backprop(Xtrain, train_lbls, eta):
     print("not implemented")
 
-def perceptron_bp_classify(W,Xtest):
-    print("not implemented")
+
+def perceptron_MSE_classify(training_images, test_images, training_labels, N_k):
+
+    #Pseudo-inverse of X^T
+    X_pinv = np.linalg.pinv(np.transpose(training_images))
+
+    w = np.array([])
+
+    for i in range(N_k):
+        b = -1 * np.ones(training_images.shape[0])
+        b[np.argwhere(training_labels == i)] = 1
+        w = np.concatenate((w, np.transpose(X_pinv).dot(b)))
+        # answer = np.concatenate((answer,b))
+
+    w = w.reshape((N_k,training_images.shape[1]))
+
+    lbls = np.zeros(test_images.shape[0])
+    for i in range(test_images.shape[0]):
+        lbls[i] = np.argmax(w.dot(test_images[i]))
+
+    return lbls
 
 def error_in_percent(true_lbls,model_lbls):
     errors = 0.0
@@ -102,38 +121,3 @@ def k_means(X,K,initial_mu_k):
         mu_k = new_mu_k
 
     return mu_k
-
-
-
-
-#USELESS JUNK!!!!!
-
-# count = 0
-#
-# mu_k = np.zeros((10,784))
-# N_k = np.zeros(10)
-#
-# for i in range(s_training.shape[0]):
-#     mu_k[training_labels[i]] += training_images[i]
-#     N_k[training_labels[i]] += 1
-#
-# for k in range(N_k.shape[0]):
-#     mu_k[k] = np.true_divide(mu_k[k], N_k[k])
-#
-# tmp = test_images[s_test[0]] - mu_k
-# k = np.apply_along_axis(np.linalg.norm, 1,tmp)
-# lbl = np.argmin(k)
-#
-# print('Guess : ',lbl)
-# print('Actual : ', test_labels[s_test[0]])
-
-
-### NEW SECTION !!!!
-
-# mean = np.apply_along_axis(np.sum,0,X)/X.shape[0]
-#
-# X_mean = X-mean
-#
-# S_T = np.transpose(X_mean).dot(X_mean)
-#
-# eigenvalues, eigenvectors = np.linalg.eig(S_T)
