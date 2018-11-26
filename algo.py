@@ -18,9 +18,9 @@ def nc_classify(Xtrain,Xtest,train_lbls,N_k):
             mu_k[k] = np.true_divide(mu_k[k], n_k[k])
 
     #Uncomment to view the mu_ks as pictures
-    # for k in range(n_k.shape[0]):
-    #     plt.imshow(np.reshape(mu_k[k],(28,28)),cmap='gray')
-    #     plt.show()
+    for k in range(n_k.shape[0]):
+        plt.imshow(np.reshape(mu_k[k],(30,40)),cmap='gray')
+        plt.show()
 
     lbls = np.zeros(Xtest.shape[0])
     for k in range(Xtest.shape[0]):
@@ -78,19 +78,24 @@ def error_in_percent(true_lbls,model_lbls):
     return errors/true_lbls.shape[0], errors
 
 
-def PCA(data,PCA_components):
+def PCA(data,test_data,PCA_components):
     mu_data = np.mean(data, axis=0)
     data_center = data - mu_data
 
 
     S_T = np.transpose(data_center).dot(data_center)
     eigenvalues, eigenvectors = np.linalg.eig(S_T)
+    eigenvalues = eigenvalues.astype(np.float64)
+    eigenvectors = eigenvectors.astype(np.float64)
 
     ind = np.argpartition(eigenvalues, -PCA_components)[-PCA_components:]
 
     W = np.array(np.transpose(eigenvectors)[ind])
 
-    return W.dot(np.transpose(data_center))
+    test_mu_data = np.mean(test_data, axis=0)
+    test_data_center = test_data - test_mu_data
+
+    return np.transpose(W.dot(np.transpose(data_center))), np.transpose(W.dot(np.transpose(test_data_center)))
 
 
 def k_means(X,K,initial_mu_k):
@@ -118,6 +123,7 @@ def k_means(X,K,initial_mu_k):
         if (np.linalg.norm(mu_k - new_mu_k) < 0.005):
             mu_k = new_mu_k
             break
+
         mu_k = new_mu_k
 
     return mu_k
