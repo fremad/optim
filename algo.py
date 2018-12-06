@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
 
 def nc_classify(Xtrain,Xtest,train_lbls,N_k):
 
@@ -18,30 +19,39 @@ def nc_classify(Xtrain,Xtest,train_lbls,N_k):
             mu_k[k] = np.true_divide(mu_k[k], n_k[k])
 
     #Uncomment to view the mu_ks as pictures
-    for k in range(n_k.shape[0]):
-        plt.imshow(np.reshape(mu_k[k],(30,40)),cmap='gray')
-        plt.show()
+    # for k in range(n_k.shape[0]):
+    #     plt.imshow(np.reshape(mu_k[k],(30,40)),cmap='gray')
+    #     plt.show()
 
     lbls = np.zeros(Xtest.shape[0])
     for k in range(Xtest.shape[0]):
         tmp = Xtest[k] - mu_k
-        lbls[k] = np.argmin(np.apply_along_axis(np.linalg.norm, 1, tmp))
+        lbls[k] = np.argmin(np.linalg.norm(tmp,axis=1))
 
     return lbls
 
-def nsc_classify(Xtrain,K,Xtest, train_lbls):
-    print("not yet implemented")
+def nsc(Xtrain,Xtest,trainging_labels, K,N_k):
+    tmp =  np.zeros((K*N_k,Xtrain.shape[1]))
+    for i in range(N_k):
+        b = Xtrain[np.argwhere(trainging_labels == i).reshape(-1)]
+        kmeans = KMeans(n_clusters=K, random_state=0).fit(b)
+        for j in range(kmeans.cluster_centers_.shape[0]):
+            tmp[kmeans.cluster_centers_.shape[0] * i + j] = kmeans.cluster_centers_[j]
+
+    lbls = np.zeros(Xtest.shape[0])
+
+    for i in range(Xtest.shape[0]):
+        tmp_p = Xtest[i] - tmp
+        lbls[i] = np.floor(np.argmin(np.apply_along_axis(np.linalg.norm, 1, tmp_p)) / K)
+
+    return lbls
 
 def nn_classify(Xtrain,Xtest,train_lbls):
 
     lbls = np.zeros(Xtest.shape[0])
 
     for i in range(Xtest.shape[0]):
-        tmp = np.zeros(Xtrain.shape[0])
-        for j in range(Xtrain.shape[0]):
-            tmp[j] = np.linalg.norm(np.subtract(Xtest[i], Xtrain[j]))
-
-        lbls[i] = train_lbls[np.argmin(tmp)]
+        lbls[i] = train_lbls[np.argmin(np.linalg.norm(Xtrain - Xtest[i],axis=1))]
 
     return lbls
 
@@ -94,6 +104,8 @@ def PCA(data,test_data,PCA_components):
 
     test_mu_data = np.mean(test_data, axis=0)
     test_data_center = test_data - test_mu_data
+
+    print("Norm: ",np.linalg.norm(W))
 
     return np.transpose(W.dot(np.transpose(data_center))), np.transpose(W.dot(np.transpose(test_data_center)))
 

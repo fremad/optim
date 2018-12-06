@@ -75,3 +75,20 @@
 # S_T = np.transpose(X_mean).dot(X_mean)
 #
 # eigenvalues, eigenvectors = np.linalg.eig(S_T)
+
+# hep = np.zeros((30,784))
+# for i in range(10):
+#     b = MNIST_training_images[np.argwhere(MNIST_training_lbls == i).reshape(-1)]
+#     kmeans = KMeans(n_clusters=3, random_state=0).fit(b)
+#     for j in range(kmeans.cluster_centers_.shape[0]):
+#         hep[kmeans.cluster_centers_.shape[0]*i+j] = kmeans.cluster_centers_[j]
+#
+# lbls = np.zeros(MNIST_test_images.shape[0])
+#
+# for i in range(MNIST_test_lbls.shape[0]):
+#     tmp = MNIST_test_images[i]-hep
+#     lbls[i] = np.floor(np.argmin(np.apply_along_axis(np.linalg.norm, 1, tmp)) / 3)
+#
+# alg.error_in_percent(lbls,MNIST_test_lbls)
+
+#nn_test_labels = alg.nn_classify(MNIST_training_lbls,MNIST_test_images,MNIST_training_lbls)
